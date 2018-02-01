@@ -11,8 +11,10 @@ VSAN65_SDK_RUBY=vsan-sdk-65-ruby-4602587.zip
 VSAN65_SDK_PYTHON=vsan-sdk-65-python-4602587.zip
 VSAN65_SDK_JAVA=vsan-sdk-65-java-4602587.zip
 VSAN65_SDK_PERL=vsan-sdk-65-perl-4602587.zip
-VDDK65=VMware-vix-disklib-6.5.0-4604867.x86_64.tar.gz
-OVFTOOl42=VMware-ovftool-4.2.0-4586971-lin.x86_64.bundle
+VDDK65=VMware-vix-disklib-6.5.0-4604867.x86_64.zip
+OVFTOOl42=VMware-ovftool-4.2.0-5965791-lin.x86_64.bundle
+
+GOVER=go1.9.3.linux-amd64.tar.gz
 
 #### ---- Install Package Dependencies ---- ####
 
@@ -127,8 +129,12 @@ cp /root/vsan-sdk-ruby/bindings/*.rb /root/vsan-sdk-ruby/samplecode
 
 #### ---- Install OVFTool 4.2 ---- ####
 
-/bin/bash /tmp/VMware-ovftool-4.2.0-4586971-lin.x86_64.bundle --eulas-agreed --required --console && \
- rm -f /tmp/VMware-ovftool-4.2.0-4586971-lin.x86_64.bundle
+/bin/bash /tmp/$OVFTOOl42 --eulas-agreed --required --console && \
+ rm -f /tmp/$OVFTOOl42
+
+#### ---- Install  VDDK65 ---- ####
+unzip /tmp/$VDDK65 && \
+rm -f /tmp/$VDDK65 && \
 
 #### ---- PowerCLI Core 1.0 ---- ####
 
@@ -145,16 +151,18 @@ rm -rf /root/powershell
 
 #### ---- go ---- ####
 
-curl -sLO https://storage.googleapis.com/golang/go1.6.linux-amd64.tar.gz
-tar xvf go1.6.linux-amd64.tar.gz
+
+
+curl -sLO https://dl.google.com/go/$GOVER
+tar xvf $GOVER
 mv go /usr/local
-rm -f go1.6.linux-amd64.tar.gz
+rm -f $GOVER
 export GOPATH=$HOME
 export PATH=$PATH:/usr/local/go/bin:$GOPATH/bin
 
 #### ---- govc ---- ####
 
-curl -sL https://github.com/vmware/govmomi/releases/download/v0.12.0/govc_linux_amd64.gz -o /tmp/govc_linux_amd64.gz
+curl -sL https://github.com/vmware/govmomi/releases/download/v0.16.0/govc_linux_amd64.gz -o /tmp/govc_linux_amd64.gz
 gunzip /tmp/govc_linux_amd64.gz
 mv /tmp/govc_linux_amd64 /usr/local/bin/govc
 chmod a+x /usr/local/bin/govc
